@@ -6,7 +6,7 @@ import seaborn as sns
 sns.set()
 
 # Read CSV from GitHub raw URL
-url = 'https://raw.githubusercontent.com/yourusername/yourrepo/main/path/to/Bar.csv'
+url = 'https://raw.githubusercontent.com/SIslam007/Proteomics-projects/refs/heads/main/Bar_Pden.csv'
 df = pd.read_csv(url)
 
 # Check the DataFrame
