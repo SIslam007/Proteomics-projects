@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 sns.set()
 
 # Read CSV from GitHub raw URL
-url = 'https://raw.githubusercontent.com/SIslam007/Proteomics-projects/refs/heads/main/Heat_Pden.csv?token=GHSAT0AAAAAADHLOBNNDYIPDTL6QIGC2QSO2DW4FMA'
+url = 'https://raw.githubusercontent.com/SIslam007/Proteomics-projects/refs/heads/main/Heat_Pden.csv'
 df = pd.read_csv(url)
 
 print(df.keys())
