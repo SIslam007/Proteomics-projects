@@ -7,7 +7,7 @@ import seaborn as sns
 sns.set()
 
 # Read CSV from GitHub raw URL
-url = 'https://raw.githubusercontent.com/SIslam007/Proteomics-projects/refs/heads/main/violin_Pden.csv?token=GHSAT0AAAAAADHLOBNM67STOXMVJRQIEZEY2DW35HQ'
+url = 'https://raw.githubusercontent.com/SIslam007/Proteomics-projects/refs/heads/main/violin_Pden.csv'
 df = pd.read_csv(url)
 
 
