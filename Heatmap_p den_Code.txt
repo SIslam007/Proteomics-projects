@@ -1,0 +1,32 @@
+import seaborn as sns
+import pandas as pd
+from matplotlib import pyplot as plt
+
+# Use seaborn style
+sns.set()
+
+# Read CSV from GitHub raw URL
+url = 'https://raw.githubusercontent.com/SIslam007/Proteomics-projects/refs/heads/main/Heat_Pden.csv?token=GHSAT0AAAAAADHLOBNNDYIPDTL6QIGC2QSO2DW4FMA'
+df = pd.read_csv(url)
+
+print(df.keys())
+print(df.shape)
+df
+
+
+df.dropna(inplace = True)
+print(df.shape)
+df = df.set_index('Gene')
+
+sns.clustermap(df, metric="euclidean", z_score=0, method="average", cmap="icefire")
+plt.savefig("Heat_Pden1.pdf")
+plt.show()
+
+
+# Change color palette
+#sns.clustermap(df, metric="euclidean", z_score=0, method="average", cmap="mako")
+#plt.show()
+#sns.clustermap(df, metric="euclidean", z_score=0, method="average", cmap="viridis")
+#plt.show()
+#sns.clustermap(df, metric="euclidean", z_score=0, method="average", cmap="Blues")
+#plt.show()
