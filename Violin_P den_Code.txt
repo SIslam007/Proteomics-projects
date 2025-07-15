@@ -1,0 +1,28 @@
+import pandas as pd
+
+from matplotlib import pyplot as plt
+import seaborn as sns
+
+# Use seaborn style
+sns.set()
+
+# Read CSV from GitHub raw URL
+url = 'https://raw.githubusercontent.com/SIslam007/Proteomics-projects/refs/heads/main/violin_Pden.csv?token=GHSAT0AAAAAADHLOBNM67STOXMVJRQIEZEY2DW35HQ'
+df = pd.read_csv(url)
+
+
+print(df.keys())
+print(df.shape)
+df
+
+
+
+df.dropna(inplace = True)
+print(df.head())
+
+
+plt.title("Violin Plot")
+plt.ylabel("Ovserved Values")
+ax = sns.violinplot(data=df,palette=['#E9967A','#2F4F4F','#33A1C9','#483D8B','#9FB6CD','#8B4789'],edgecolor="gray")
+plt.savefig("violin_Pden.pdf")
+plt.show()
