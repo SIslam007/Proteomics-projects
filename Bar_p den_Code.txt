@@ -1,0 +1,29 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Use seaborn style
+sns.set()
+
+# Read CSV from GitHub raw URL
+url = 'https://raw.githubusercontent.com/yourusername/yourrepo/main/path/to/Bar.csv'
+df = pd.read_csv(url)
+
+# Check the DataFrame
+print(df.head())
+
+# Bar plot with custom colors
+plt.figure(figsize=(10,6))  # Optional: Resize the figure
+plt.bar(
+    x=df['Samples'],
+    height=df['Identified Proteins'],
+    color=['rosybrown']*4 + ['lightskyblue']*4  # 4 bars each color
+)
+
+# Customize plot
+plt.title('Number of Identified Proteins by Sample')
+plt.xlabel('Samples')
+plt.ylabel('Identified Proteins')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
