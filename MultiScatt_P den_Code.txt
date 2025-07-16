@@ -1,0 +1,40 @@
+import pandas as pd
+import numpy as np
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Use seaborn style
+sns.set()
+
+# Read CSV from GitHub raw URL
+url = 'https://raw.githubusercontent.com/SIslam007/Proteomics-projects/refs/heads/main/Heat_Pden.csv'
+df = pd.read_csv(url)
+
+print(df.keys())
+print(df.shape)
+df
+
+
+## for pair plot
+sns.pairplot(df)
+
+##For pair grid
+grids = sns.PairGrid(df)
+grids.map(plt.scatter,color="#698B69",alpha=0.4)
+
+##You can also plot different types of graphs on the same pair grid. 
+#For instance, if you want to plot a "distribution" plot on the diagonal, "kdeplot" on the upper half of the diagonal, 
+#and "scatter" plot on the lower part of the diagonal you can use map_diagonal, map_upper, and map_lower functions, 
+#respectively. The type of plot to be drawn is passed as the parameter to these functions. You can see the true power of 
+#the pair grid function from the image above. On the diagonals we have distribution plots, 
+#on the upper half we have the kernel density plots, while on the lower half we have the scatter plots.
+
+#Take a look at the following script:
+
+grids = sns.PairGrid(df)
+grids.map_diag(sns.histplot,color="#808A87",alpha=0.9)
+grids.map_upper(sns.kdeplot,color="#8B2323",alpha=0.5)
+grids.map_lower(plt.scatter,color="#458B74",alpha=0.4)
+
+plt.show()
