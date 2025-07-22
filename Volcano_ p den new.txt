@@ -1,0 +1,85 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import ttest_ind
+import re
+
+url = 'https://raw.githubusercontent.com/SIslam007/Proteomics-projects/refs/heads/main/Protein_group.csv'
+df = pd.read_csv(url)
+df.head()
+
+# Calculate mean for WT and DM replicates
+df['WT_Mean'] = df[['WT_1', 'WT_2', 'WT_3']].mean(axis=1)
+df['hnox_Mean'] = df[['hnox_1', 'hnox_2', 'hnox_3']].mean(axis=1)
+
+# Calculate log2 fold-change
+#df['Log2_FC'] = np.log2(df['hnox_Mean'] / df['WT_Mean'].replace(0, np.nan)) (the values are already log transformed, so i have not used this)
+df['Log2_FC'] = (df['hnox_Mean'] - df['WT_Mean'].replace(0, np.nan))
+
+
+# Perform t-tests (two-sample assuming equal variance)
+t_stats, p_values = ttest_ind(
+    df[['WT_1', 'WT_2', 'WT_3']].values,
+    df[['hnox_1', 'hnox_2', 'hnox_3']].values,
+    axis=1, nan_policy='omit'
+)
+
+# Add p-values and -log10(p-values) to the DataFrame
+df['P_Value'] = p_values
+df['MinusLog10_P'] = -np.log10(df['P_Value'])
+
+# Filter top 10 significant genes from both sides
+top_genes = pd.concat([
+    df.nsmallest(5, 'P_Value').nsmallest(5, 'Log2_FC'),  # Top 10 down-regulated
+    df.nsmallest(5, 'P_Value').nlargest(5, 'Log2_FC')   # Top 10 up-regulated
+])
+
+
+# Separate significant genes for coloring
+left_candidates = top_genes[top_genes['Log2_FC'] < -0.58]
+right_candidates = top_genes[top_genes['Log2_FC'] >= 0.58]
+
+
+
+
+# Create the volcano plot
+plt.figure(figsize=(10, 8))
+plt.scatter(df['Log2_FC'], df['MinusLog10_P'], alpha=0.6, edgecolor='black', marker='o', s=50, color='#87CEEB')
+
+# Highlight significant genes
+plt.scatter(left_candidates['Log2_FC'], left_candidates['MinusLog10_P'], color='grey', s=150, edgecolor='black', marker='o', label='p ≤ 0.05, FC ≤ -0.58')
+plt.scatter(right_candidates['Log2_FC'], right_candidates['MinusLog10_P'], color='orange', s=150, edgecolor='black', marker='o', label='p ≤ 0.05, FC ≥ 0.58')
+
+# Add gene labels
+for _, row in top_genes.iterrows():
+    plt.text(row['Log2_FC'], row['MinusLog10_P'], row['gene_symbol'], fontsize=9, ha='right')
+
+# Add reference lines
+plt.axhline(-np.log10(0.05), color='black', linestyle='--')
+plt.axvline(0.58, color='black', linestyle='--')
+plt.axvline(-0.58, color='black', linestyle='--')
+
+# Add a border
+plt.gca().spines['top'].set_visible(True)
+plt.gca().spines['right'].set_visible(True)
+plt.gca().spines['left'].set_linewidth(1.5)
+plt.gca().spines['bottom'].set_linewidth(1.5)
+
+# Update axis labels and add legend
+plt.xlabel('Log2 Fold Change (hnox vs WT)', fontsize=14)
+plt.ylabel('-Log10(P-Value)', fontsize=14)
+plt.legend(loc='best', fontsize=10, title='Criteria', title_fontsize=12)
+plt.tight_layout()
+# Show the plot
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
